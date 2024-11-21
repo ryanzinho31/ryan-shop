@@ -1,5 +1,8 @@
 import { createContext, useState, useEffect, useReducer } from "react";
 
+
+
+
 export const CartContext = createContext({
     items: [],
     products: [],
@@ -10,11 +13,20 @@ export const CartContext = createContext({
     subItemToCart: () => { }
 });
 
+
+
+
 export default function CartContextProvider({ children }) {
+
+
+
 
     const [products, setProducts] = useState([]);
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
+
+
+
 
     useEffect(() => {
         async function fetchProducts() {
@@ -29,21 +41,42 @@ export default function CartContextProvider({ children }) {
             setLoading(false);
         }
 
+
+
+
         fetchProducts();
     }, []);
 
+
+
+
     // SHOPPING CART
+
+
+
 
     function cartReducer(state, action) {
 
+
+
+
         if (action.type === "ADD_ITEM") {
             const updatedItems = [...state.items];
+
+
+
 
             const existingCartItemIndex = updatedItems.findIndex(
                 (item) => item.id === action.payload.id
             );
 
+
+
+
             const existingCartItem = updatedItems[existingCartItemIndex];
+
+
+
 
             if (existingCartItem) {
                 const updatedItem = {
@@ -64,17 +97,32 @@ export default function CartContextProvider({ children }) {
                 });
             }
 
+
+
+
             return { items: updatedItems };
         }
 
+
+
+
         if (action.type === "SUB_ITEM") {
             const updatedItems = [...state.items];
+
+
+
 
             const existingCartItemIndex = updatedItems.findIndex(
                 (item) => item.id === action.payload.id
             );
 
+
+
+
             const existingCartItem = updatedItems[existingCartItemIndex];
+
+
+
 
             if (existingCartItem) {
                 const updatedItem = {
@@ -95,19 +143,37 @@ export default function CartContextProvider({ children }) {
                 });
             }
 
+
+            
+
             return { items: updatedItems };
         }
 
+
+
+
         if (action.type === "UPDATE_ITEM") {
             const updatedItems = [...state.items];
+
+
+
 
             const updatedItemIndex = updatedItems.findIndex(
                 (item) => item.id === action.payload.id
             );
 
+
+
+
             const updatedItem = { ...updatedItems[updatedItemIndex] };
 
+
+
+
             updatedItem.quantity += action.payload.amount;
+
+
+
 
             if (updatedItem.quantity < 1) {
                 updatedItems.splice(updatedItemIndex, 1);
@@ -115,16 +181,28 @@ export default function CartContextProvider({ children }) {
                 updatedItems[updatedItemIndex] = updatedItem;
             }
 
+
+
+
             return { ...state, items: updatedItems };
         }
 
+
+        
+
         return state;
     }
+
+
+
 
     const [cartState, cartDispatch] = useReducer(
         cartReducer,
         { items: [] }
     );
+
+
+
 
     function handleAddItemToCart(id) {
         cartDispatch({
@@ -133,6 +211,9 @@ export default function CartContextProvider({ children }) {
         });
     }
 
+
+
+
     function handleUpdateCartItemQuantity(id, amount) {
         cartDispatch({
             type: "UPDATE_ITEM",
@@ -140,12 +221,18 @@ export default function CartContextProvider({ children }) {
         });
     }
 
+
+
+
     function handleSubItemToCart(id) {
         cartDispatch({
             type: "SUB_ITEM",
             payload: { id, products }
         });
     }
+
+
+
 
     const ctx = {
         items: cartState.items,
@@ -157,8 +244,14 @@ export default function CartContextProvider({ children }) {
         subItemToCart: handleSubItemToCart
     };
 
+
+
+
     return <CartContext.Provider value={ctx}>
         {children}
     </CartContext.Provider>
+
+
+
 
 }

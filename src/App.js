@@ -2,7 +2,7 @@ import { Route, Routes } from "react-router-dom";
 import Header from "./components/Header";
 import Shop from "./components/Shop";
 import Checkout from "./components/Checkout";
-import CartContextProvider from "./context/CartContext";
+import CartContextProvider from "./components/context/CartContext";
 
 function App() {
   return (
